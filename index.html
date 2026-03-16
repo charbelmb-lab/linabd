@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Happy Birthday ♡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    background:#0d0b14;
+    color:#f0e6d3;
+    font-family:'Montserrat',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* PETALS */
+  .petal{
+    position:fixed;
+    width:10px;height:14px;
+    border-radius:50% 0 50% 0;
+    opacity:0;
+    pointer-events:none;
+    animation:fall linear forwards;
+    z-index:999;
+  }
+  @keyframes fall{
+    0%{opacity:.8;transform:translateY(-20px) rotate(0deg);}
+    100%{opacity:0;transform:translateY(110vh) rotate(720deg);}
+  }
+
+  /* SCREENS */
+  .screen{
+    display:none;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    padding:24px;
+  }
+  .screen.active{display:flex;}
+
+  /* ─── SCREEN 1: ENVELOPE ─── */
+  #s1{background:#0d0b14;text-align:center;gap:32px;}
+
+  .envelope-wrap{cursor:pointer;position:relative;}
+
+  .env-body{
+    width:240px;height:170px;
+    background:linear-gradient(135deg,#1e1830,#2a1e40);
+    border:1px solid #7c5c9a55;
+    border-radius:4px;
+    position:relative;
+    margin:auto;
+    box-shadow:0 20px 60px #0008;
+    transition:transform .3s;
+  }
+  .env-body:hover{transform:scale(1.03);}
+
+  .env-flap{
+    position:absolute;top:0;left:0;right:0;
+    height:90px;
+    background:linear-gradient(160deg,#251c3a,#1a1428);
+    clip-path:polygon(0 0,100% 0,50% 65%);
+    border-bottom:1px solid #9b79c344;
+    transform-origin:top;
+    transition:transform .6s cubic-bezier(.4,0,.2,1);
+  }
+  .env-open .env-flap{transform:rotateX(180deg);}
+
+  .env-letter{
+    position:absolute;
+    bottom:-8px;left:50%;transform:translateX(-50%);
+    width:200px;
+    background:#f7f0e8;
+    color:#2a1e40;
+    border-radius:2px;
+    padding:12px;
+    font-size:12px;
+    line-height:1.7;
+    font-family:'Cormorant Garamond',serif;
+    text-align:center;
+    opacity:0;
+    transition:all .6s .2s;
+    box-shadow:0 8px 32px #0006;
+  }
+  .env-open .env-letter{bottom:60px;opacity:1;}
+
+  .wax{
+    position:absolute;
+    bottom:-14px;left:50%;transform:translateX(-50%);
+    width:32px;height:32px;
+    background:radial-gradient(circle at 40% 40%,#c1416a,#8b1a3a);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;
+    box-shadow:0 2px 12px #c1416a44;
+    z-index:2;
+    transition:transform .3s;
+    cursor:pointer;
+  }
+  .wax:hover{transform:translateX(-50%) scale(1.12);}
+
+  .s1-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(28px,6vw,48px);
+    font-weight:300;
+    letter-spacing:4px;
+    color:#f0e6d3;
+    line-height:1.4;
+  }
+  .s1-title em{color:#c1416a;font-style:italic;}
+
+  .s1-hint{
+    font-size:11px;letter-spacing:3px;color:#7c6c9a;
+    text-transform:uppercase;
+    animation:breathe 2s infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
+
+  /* ─── SCREEN 2: LOVE METER ─── */
+  #s2{gap:40px;text-align:center;background:#0d0b14;}
+
+  .s2-heading{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(22px,5vw,38px);
+    font-weight:300;
+    letter-spacing:2px;
+    line-height:1.5;
+  }
+  .s2-heading span{color:#c1416a;font-style:italic;}
+
+  .heart-btn{
+    cursor:pointer;
+    font-size:68px;
+    line-height:1;
+    filter:drop-shadow(0 0 0px #c1416a);
+    transition:transform .15s, filter .3s;
+    user-select:none;
+  }
+  .heart-btn:active{transform:scale(.88);}
+
+  .meter-track{
+    width:min(280px,80vw);height:10px;
+    background:#2a1e40;
+    border-radius:99px;
+    overflow:hidden;
+    margin:0 auto;
+  }
+  .meter-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,#8b1a3a,#c1416a,#e87fa0);
+    border-radius:99px;
+    transition:width .4s cubic-bezier(.4,0,.2,1);
+  }
+
+  .meter-msg{
+    font-family:'Cormorant Garamond',serif;
+    font-size:22px;font-weight:300;
+    min-height:32px;
+    color:#e0c8b0;
+    transition:opacity .3s;
+    font-style:italic;
+  }
+
+  .s2-cta{
+    display:none;
+    padding:12px 32px;
+    background:transparent;
+    border:1px solid #c1416a;
+    color:#e0c8b0;
+    border-radius:99px;
+    font-family:'Montserrat',sans-serif;
+    font-size:11px;letter-spacing:3px;text-transform:uppercase;
+    cursor:pointer;
+    transition:all .3s;
+  }
+  .s2-cta:hover{background:#c1416a22;}
+
+  /* ─── SCREEN 3: TIMELINE ─── */
+  #s3{padding:64px 16px 80px;gap:0;justify-content:flex-start;background:#0d0b14;}
+
+  .timeline-intro{
+    text-align:center;
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(22px,4vw,32px);
+    font-weight:300;
+    letter-spacing:4px;
+    margin-bottom:12px;
+    color:#f0e6d3;
+  }
+
+  .divider{
+    width:60px;height:1px;
+    background:linear-gradient(90deg,transparent,#c1416a,transparent);
+    margin:0 auto 48px;
+  }
+
+  .tl-item{
+    width:min(500px,90vw);margin:0 auto 72px;
+    opacity:0;transform:translateY(40px);
+    transition:all .7s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+  .tl-item.visible{opacity:1;transform:translateY(0);}
+
+  .tl-year{
+    font-family:'Cormorant Garamond',serif;
+    font-size:13px;letter-spacing:5px;text-transform:uppercase;
+    color:#c1416a;margin-bottom:14px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .tl-year::after{content:'';flex:1;height:1px;background:#c1416a33;}
+
+  .tl-photo{
+    width:100%;aspect-ratio:4/3;
+    background:linear-gradient(135deg,#1e1830 0%,#2a1e40 50%,#1a1428 100%);
+    border-radius:4px;
+    border:1px solid #7c5c9a33;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+  .tl-photo img{
+    width:100%;height:100%;object-fit:cover;border-radius:3px;
+    display:block;
+  }
+  .tl-photo .placeholder{
+    font-family:'Cormorant Garamond',serif;
+    font-size:14px;font-style:italic;color:#7c6c9a;
+    padding:40px 0;
+  }
+  .tl-photo .img-label{
+    position:absolute;bottom:0;left:0;right:0;
+    padding:16px 14px 12px;
+    background:linear-gradient(transparent,rgba(13,11,20,.75));
+    font-size:10px;letter-spacing:3px;color:#f0e6d3aa;
+    text-align:center;text-transform:uppercase;
+  }
+
+  .tl-caption{
+    margin-top:16px;
+    font-family:'Cormorant Garamond',serif;
+    font-size:17px;font-weight:300;font-style:italic;
+    color:#b09890;line-height:1.8;
+    text-align:center;
+  }
+
+  .tl-photos{
+    display:grid;
+    gap:8px;
+    margin-top:8px;
+  }
+  .tl-photos.cols-2{grid-template-columns:1fr 1fr;}
+  .tl-photos.cols-1{grid-template-columns:1fr;}
+  .tl-photo-sm{
+    aspect-ratio:4/3;
+    background:linear-gradient(135deg,#1e1830,#2a1e40);
+    border-radius:4px;
+    border:1px solid #7c5c9a33;
+    overflow:hidden;
+    position:relative;
+  }
+  .tl-photo-sm img{
+    width:100%;height:100%;object-fit:cover;display:block;border-radius:3px;
+  }
+  .tl-photo-sm .placeholder{
+    font-family:'Cormorant Garamond',serif;
+    font-size:13px;font-style:italic;color:#7c6c9a;
+    display:flex;align-items:center;justify-content:center;
+    height:100%;
+  }
+
+  /* FINAL CARD */
+  .final-card{
+    width:min(500px,90vw);margin:0 auto 48px;
+    text-align:center;opacity:0;transform:translateY(40px);
+    transition:all .7s .3s;
+  }
+  .final-card.visible{opacity:1;transform:translateY(0);}
+
+  .final-msg{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(24px,5vw,40px);
+    font-weight:300;
+    line-height:1.6;
+    color:#f0e6d3;
+    margin-bottom:36px;
+  }
+  .final-msg em{color:#c1416a;}
+
+  .dance-btn{
+    padding:14px 36px;
+    background:transparent;
+    border:1px solid #c1416a;
+    color:#e0c8b0;
+    border-radius:99px;
+    font-family:'Montserrat',sans-serif;
+    font-size:11px;letter-spacing:4px;text-transform:uppercase;
+    cursor:pointer;
+    transition:all .3s;
+  }
+  .dance-btn:hover{background:#c1416a22;}
+
+  .dance-area{
+    margin-top:28px;display:none;
+    flex-direction:column;align-items:center;gap:16px;
+  }
+  .dance-area video{
+    width:min(300px,80vw);
+    border-radius:4px;
+    border:1px solid #7c5c9a44;
+  }
+  .dance-note{
+    font-family:'Cormorant Garamond',serif;
+    font-size:14px;font-style:italic;
+    color:#7c6c9a;letter-spacing:1px;
+  }
+
+  /* FLOATING ROSE */
+  .floating-rose{
+    position:fixed;bottom:24px;right:24px;
+    font-size:28px;opacity:0;
+    pointer-events:none;
+    z-index:10;
+    transition:opacity .5s;
+  }
+  .floating-rose.visible{
+    opacity:1;
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+  }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: ENVELOPE -->
+<div class="screen active" id="s1">
+  <div class="s1-title">Happy Birthday,<br><em>LII NNA</em></div>
+  <div class="envelope-wrap">
+    <div class="env-body" id="envBody">
+      <div class="env-flap" id="envFlap"></div>
+      <div class="env-letter" id="envLetter">
+        A little something<br>made just for you…
+      </div>
+      <div class="wax" id="waxSeal" title="Break the seal">♡</div>
+    </div>
+  </div>
+  <div class="s1-hint" id="s1Hint">tap the seal to open</div>
+</div>
+
+<!-- SCREEN 2: LOVE METER -->
+<div class="screen" id="s2">
+  <div class="s2-heading">How much do I love you?<br><span>Let's find out…</span></div>
+  <div class="heart-btn" id="heartBtn">🤍</div>
+  <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+    <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+    <div class="meter-msg" id="meterMsg">tap the heart</div>
+  </div>
+  <button class="s2-cta" id="s2Cta">open our story →</button>
+</div>
+
+<!-- SCREEN 3: TIMELINE -->
+<div class="screen" id="s3">
+  <div class="timeline-intro">Our story, so far</div>
+  <div class="divider"></div>
+
+  <div class="tl-item" id="tl2023">
+    <div class="tl-year">2023</div>
+    <div class="tl-photo">
+      <img src="2023.jpeg" style="object-position:top;" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='block'">
+      <div class="placeholder" style="display:none;">[ your photo here ]</div>
+      <div class="img-label">where it all began</div>
+    </div>
+    <div class="tl-photos cols-1">
+      <div class="tl-photo-sm">
+        <img src="2023-1.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='flex'">
+        <div class="placeholder" style="display:none;">[ 2023-1 ]</div>
+      </div>
+    </div>
+    <div class="tl-caption">The beginning of something beautiful.</div>
+  </div>
+
+  <div class="tl-item" id="tl2024">
+    <div class="tl-year">2024</div>
+    <div class="tl-photo">
+      <img src="2024.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='block'">
+      <div class="placeholder" style="display:none;">[ your photo here ]</div>
+      <div class="img-label">growing together</div>
+    </div>
+    <div class="tl-photos cols-2">
+      <div class="tl-photo-sm">
+        <img src="2024-1.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='flex'">
+        <div class="placeholder" style="display:none;">[ 2024-1 ]</div>
+      </div>
+      <div class="tl-photo-sm">
+        <img src="2024-2.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='flex'">
+        <div class="placeholder" style="display:none;">[ 2024-2 ]</div>
+      </div>
+    </div>
+    <div class="tl-caption">Every moment with you became a favourite.</div>
+  </div>
+
+  <div class="tl-item" id="tl2025">
+    <div class="tl-year">2025</div>
+    <div class="tl-photo">
+      <img src="2025.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='block'">
+      <div class="placeholder" style="display:none;">[ your photo here ]</div>
+      <div class="img-label">us, always</div>
+    </div>
+    <div class="tl-photos cols-1">
+      <div class="tl-photo-sm">
+        <img src="2025-1.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='flex'">
+        <div class="placeholder" style="display:none;">[ 2025-1 ]</div>
+      </div>
+    </div>
+    <div class="tl-caption">Some years just feel golden.</div>
+  </div>
+
+  <div class="tl-item" id="tl2026">
+    <div class="tl-year">2026</div>
+    <div class="tl-photo">
+      <img src="2026.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='block'">
+      <div class="placeholder" style="display:none;">[ your photo here ]</div>
+      <div class="img-label">today ♡</div>
+    </div>
+    <div class="tl-photos cols-1">
+      <div class="tl-photo-sm">
+        <img src="2026-1.jpeg" onerror="this.style.display='none';this.parentElement.querySelector('.placeholder').style.display='flex'">
+        <div class="placeholder" style="display:none;">[ 2026-1 ]</div>
+      </div>
+    </div>
+    <div class="tl-caption">And this one? This one's yours.</div>
+  </div>
+
+  <!-- FINAL MESSAGE -->
+  <div class="final-card" id="finalCard">
+    <div class="divider"></div>
+    <div class="final-msg">
+      To many more years of<br>
+      <em>you and me.</em><br>
+      I love you babe.
+    </div>
+    <button class="dance-btn" id="danceBtn">celebrate with me 🎉</button>
+    <div class="dance-area" id="danceArea">
+      <video id="danceVid" width="300" autoplay muted loop playsinline>
+        <source src="cbd.mp4" type="video/mp4">
+      </video>
+      <audio id="danceAudio" src="cbd.mp3"></audio>
+      <div class="dance-note">♪ just for you ♪</div>
+    </div>
+  </div>
+</div>
+
+<div class="floating-rose" id="floatingRose">🌹</div>
+
+<script>
+  const msgs = [
+    "a little…","meh","getting warmer…","more, more…",
+    "dangerously close","hearts racing ♡","off the charts","too much to measure",
+    "∞ — there's no number","beyond infinity, always"
+  ];
+  const hearts = ["🤍","🤍","🩷","🩷","❤️","❤️","❤️‍🔥","❤️‍🔥","💗","💖"];
+  let clicks = 0;
+
+  // WAX SEAL → open envelope
+  document.getElementById('waxSeal').onclick = function(e){
+    e.stopPropagation();
+    document.getElementById('envBody').classList.add('env-open');
+    document.getElementById('s1Hint').textContent = 'tap anywhere to continue';
+    setTimeout(function(){
+      document.getElementById('s1').onclick = function(){ switchScreen('s1','s2'); };
+    }, 800);
+  };
+
+  function switchScreen(from, to){
+    document.getElementById(from).classList.remove('active');
+    document.getElementById(to).classList.add('active');
+    window.scrollTo(0,0);
+    if(to === 's3') setTimeout(revealTimeline, 300);
+  }
+
+  // HEART CLICKS
+  document.getElementById('heartBtn').onclick = function(){
+    if(clicks >= 10) return;
+    clicks++;
+    var pct = clicks * 10;
+    document.getElementById('meterFill').style.width = pct + '%';
+    document.getElementById('meterMsg').textContent = msgs[clicks-1];
+    document.getElementById('heartBtn').textContent = hearts[clicks-1];
+    spawnPetals(3);
+    if(clicks >= 10){
+      var hb = document.getElementById('heartBtn');
+      hb.style.fontSize = '84px';
+      hb.style.filter = 'drop-shadow(0 0 24px #c1416a)';
+      document.getElementById('s2Cta').style.display = 'inline-block';
+    }
+  };
+
+  document.getElementById('s2Cta').onclick = function(){
+    switchScreen('s2','s3');
+  };
+
+  function spawnPetals(n){
+    var colors = ['#c1416a','#e87fa0','#8b1a3a','#f0c0cc'];
+    for(var i=0;i<n;i++){
+      var p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random()*100 + 'vw';
+      p.style.top = '-20px';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animationDuration = (2 + Math.random()*2) + 's';
+      p.style.animationDelay = Math.random()*0.5 + 's';
+      document.body.appendChild(p);
+      setTimeout(function(){ p.remove(); }, 5000);
+    }
+  }
+
+  function revealTimeline(){
+    var items = document.querySelectorAll('.tl-item');
+    items.forEach(function(el, i){
+      setTimeout(function(){ el.classList.add('visible'); }, i * 450);
+    });
+    setTimeout(function(){
+      document.getElementById('finalCard').classList.add('visible');
+      document.getElementById('floatingRose').classList.add('visible');
+      spawnPetals(14);
+    }, items.length * 450 + 200);
+  }
+
+  // DANCE BUTTON
+  document.getElementById('danceBtn').onclick = function(){
+    document.getElementById('danceBtn').style.display = 'none';
+    document.getElementById('danceArea').style.display = 'flex';
+    document.getElementById('danceAudio').play();
+    document.getElementById('danceVid').play();
+    spawnPetals(22);
+    setTimeout(function(){
+      document.getElementById('danceArea').style.display = 'none';
+      document.getElementById('danceBtn').style.display = 'inline-block';
+      var a = document.getElementById('danceAudio');
+      var v = document.getElementById('danceVid');
+      a.pause(); a.currentTime = 0;
+      v.pause(); v.currentTime = 0;
+    }, 10000);
+  };
+</script>
+</body>
+</html>
